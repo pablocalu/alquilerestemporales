@@ -18,6 +18,9 @@ const registerUser = async (e) => {
             email,
             password
         })
+        setName('')
+        setEmail('')
+        setPassword('')
         Toastify({
             text: 'User succesfully created. Please Login.',
             duration: 3000,
@@ -31,6 +34,9 @@ const registerUser = async (e) => {
               },
         }).showToast()
     } catch (error) {
+        setName('')
+        setEmail('')
+        setPassword('')
         Toastify({
             text: 'Registration fail. Try again',
             duration: 3000,
