@@ -1,28 +1,30 @@
+
 import axios from 'axios'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { UserContext } from '../UserContext'
 
 export default function AccountPage() {
 
-  const [toHomePage, setToHomePage] = useStat(null)
   const { user, ready, setUser } = useContext(UserContext)
+  const [toHomePage, setToHomePage] = useState(null)
+
   let { subpage } = useParams()
-  if(subpage === undefined) {
+  if(subpage === undefined){
     subpage = 'profile'
   }
 
   const logout = async () => {
     await axios.post('/logout')
-    setUser(null)
     setToHomePage('/')
+    setUser(null)
   }
 
   if(!ready) {
     return 'Loading..'
   }
 
-  if(ready && !user) {
+  if(ready && !user && !toHomePage) {
     return <Navigate to={'/login'}/>
   }
 
