@@ -1,11 +1,12 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 
 export default function LoginPage() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [redirect, setRedirect] = useState(false)
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -13,11 +14,15 @@ export default function LoginPage() {
     try {
       await axios.post('/login', {email, password})
       alert('login ok')
+      setRedirect(true)
     } catch (error) {
       alert('fail', error)
     }
   }
 
+  if(redirect){
+    return <Navigate to={'/'}/>
+  }
 
   return (
     <div className='mt-4 grow flex items-center justify-around'>
