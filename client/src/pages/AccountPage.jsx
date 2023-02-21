@@ -5,7 +5,8 @@ import { UserContext } from '../UserContext'
 
 export default function AccountPage() {
 
-  const { user, ready } = useContext(UserContext)
+  const [toHomePage, setToHomePage] = useStat(null)
+  const { user, ready, setUser } = useContext(UserContext)
   let { subpage } = useParams()
   if(subpage === undefined) {
     subpage = 'profile'
@@ -13,6 +14,8 @@ export default function AccountPage() {
 
   const logout = async () => {
     await axios.post('/logout')
+    setUser(null)
+    setToHomePage('/')
   }
 
   if(!ready) {
@@ -29,6 +32,10 @@ export default function AccountPage() {
       classes += ' bg-primary rounded-full text-white'
     }
     return classes
+  }
+
+  if(toHomePage){
+    return <Navigate to={toHomePage}/>
   }
 
   return (
