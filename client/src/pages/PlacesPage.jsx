@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Perks from '../Perks';
+import axios from 'axios'
 
 export default function PlacesPage() {
   const { action } = useParams();
   const [title, setTitle] = useState('')
   const [address, setAddress] = useState('')
-  const [addedPhotos, setAddedPhotos] = useState([])
+  const [addedPhotos1, setAddedPhotos1] = useState([])
+  const [addedPhotos2, setAddedPhotos2] = useState([])
   const [photoLink, setPhotoLink] = useState('')
   const [description, setDescription] = useState('')
   const [perks, setPerks] = useState([])
@@ -32,6 +34,32 @@ export default function PlacesPage() {
         {inputDescription(description)}
       </>
     );
+  }
+
+  const addPhotoByLink = async (e) => {
+    e.preventDefault()
+    const { data:filename } = await axios.post('/upload-by-link', {link: photoLink})
+    setAddedPhotos1( prev => {
+      return [...prev, filename]
+    })
+    setPhotoLink('')
+  }
+
+  const uploadPhoto = (e) => {
+    const files = e.target.files
+    const data = new FormData()
+    for (let i = 0; i < files.length; i++) {
+      data.append('photos', files[i]);
+    }
+    axios.post('/upload', data, {
+      headers: {'Content-type': 'multipart/form-data'}
+    }).then( response => {
+      const { data:filenames } = response;
+      console.log(filenames)
+      setAddedPhotos2(prev => {
+        return [...prev, ...filenames]
+      })
+    })
   }
 
   return (
@@ -70,12 +98,23 @@ export default function PlacesPage() {
             {preInput('Photos', 'Put some photos')}
             <div className="flex gap-2">
               <input type="text" placeholder="Add using a link" value={photoLink} onChange={e => setPhotoLink(e.target.value)}/>
-              <button className="bg-gray-200 px-4 rounded-2xl">
+              <button onClick={addPhotoByLink} className="bg-gray-200 px-4 rounded-2xl">
                 Add&nbsp;photo
               </button>
             </div>
-            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-              <button className="flex gap-1 justify-center border bg-transparent rounded-2xl p-8 text-2xl text-gray-600">
+            <div className="gap-2 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {addedPhotos1.length > 0 && addedPhotos1.map(link => (
+                <div className='h-32 flex'>
+                  <img className='rounded-2xl w-full object-cover' src={`http://localhost:4000/uploads/${link}`} />
+                </div>
+              ))}
+               {addedPhotos2.length > 0 && addedPhotos2.map(link => (
+                <div className='h-32 flex'>
+                  <img className='rounded-2xl w-full object-cover' src={`http://localhost:4000/${link}`} />
+                </div>
+              ))}
+              <label className="h-32 cursor-pointer flex items-center gap-1 justify-center border bg-transparent rounded-2xl p-2 text-2xl text-gray-600">
+              <input type={'file'} multiple className='hidden' onChange={uploadPhoto}/>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -91,7 +130,7 @@ export default function PlacesPage() {
                   />
                 </svg>
                 Upload
-              </button>
+              </label>
             </div>
             {preInput('Description', 'Fancy description')}
             <textarea value={description} onChange={e => setDescription(e.target.value)} />
