@@ -99,22 +99,6 @@ app.post('/upload-by-link', async (req, res) => {
   res.json(newName);
 });
 
-/* const photosMiddleware = multer({dest:'uploads/'});
-app.post('/upload', photosMiddleware.array('photos', 100), (req,res) => {
-  const uploadedFiles = [];
-  console.log(req.files, '-------------')
-  for (let i = 0; i < req.files.length; i++) {
-    const {filename,originalname} = req.files[i];
-    const parts = originalname.split('.');
-    const ext = parts[parts.length - 1];
-    const newPath = filename + '.' + ext;
-    fs.renameSync(filename, newPath);
-    console.log(newPath, 'newpath---------------------')
-    uploadedFiles.push(newPath);
-    
-  }
-  res.json(uploadedFiles);
-}); */
 
 const photosMiddleware = multer({ dest: 'uploads/' });
 app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
@@ -145,6 +129,7 @@ app.post('/places', (req, res) => {
     checkOut,
     maxGuests,
   } = req.body;
+
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) throw err;
     const placeDoc = await Place.create({
@@ -161,7 +146,7 @@ app.post('/places', (req, res) => {
       checkOut,
       maxGuests,
     });
-    res.json(req.body);
+    res.json(placeDoc);
   });
 });
 
@@ -177,5 +162,44 @@ app.get('/places/:id', async (req,res) => {
   const {id} = req.params;
   res.json(await Place.findById(id));
 });
+
+app.put('/places', async (req, res) => {
+  const { token } = req.cookies;
+  const {
+    id,
+    title,
+    address,
+    addedPhotos1,
+    addedPhotos2,
+    description,
+    price,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+  } = req.body;
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+    const placeDoc = await Place.findById(id)
+    if(userData.id === placeDoc.owner.toString()){
+      placeDoc.set({
+        price,
+        title,
+        address,
+        addedPhotos1,
+        addedPhotos2,
+        description,
+        perks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests,
+      })
+      placeDoc.save()
+      res.json('ok')
+    }
+  })
+})
 
 app.listen(4000);

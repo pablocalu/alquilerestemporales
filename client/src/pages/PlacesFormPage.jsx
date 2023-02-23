@@ -23,24 +23,26 @@ export default function PlacesFormPage() {
     const [redirect, setRedirect] = useState(false)
 
     useEffect(() => {
-        if(!id){
-            return
+        if(!id) return;
+        try {
+          axios.get('/places/'+id).then(
+            response => {
+              const { data } = response
+              setTitle(data.title)
+              setAddress(data.address)
+              setAddedPhotos1(data.addedPhotos1)
+              setAddedPhotos2(data.addedPhotos2)
+              setDescription(data.description)
+              setPerks(data.perks)
+              setExtraInfo(data.extraInfo)
+              setCheckIn(data.checkIn)
+              setCheckOut(data.checkOut)
+              setMaxGuests(data.maxGuests)
+            }
+          )
+        } catch (error) {
+          console.log(error)
         }
-        axios.get('/places/'+id).then(
-          response => {
-            const { data } = response
-            setTitle(data.title)
-            setAddress(data.address)
-/*             setAddedPhotos1(data.addedPhotos1)
-            setAddedPhotos2(data.addedPhotos2) */
-            setDescription(data.description)
-            setPerks(data.perks)
-            setExtraInfo(data.extraInfo)
-            setCheckIn(data.checkIn)
-            setCheckOut(data.checkOut)
-            setMaxGuests(data.maxGuests)
-          }
-        )
     }, [id])
 
     function inputHeader(text) {
@@ -80,7 +82,7 @@ export default function PlacesFormPage() {
               id,
               ...placeData
              })
-             alert('salio todo bien perrito')
+             alert('salio todo BIEN EL EDIT')
              setRedirect(true)
          } catch (error) {
              alert('ups se rompio algo')
