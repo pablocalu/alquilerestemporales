@@ -26,7 +26,21 @@ export default function PlacesFormPage() {
         if(!id){
             return
         }
-        axios.get('/places/'+id)
+        axios.get('/places/'+id).then(
+          response => {
+            const { data } = response
+            setTitle(data.title)
+            setAddress(data.address)
+/*             setAddedPhotos1(data.addedPhotos1)
+            setAddedPhotos2(data.addedPhotos2) */
+            setDescription(data.description)
+            setPerks(data.perks)
+            setExtraInfo(data.extraInfo)
+            setCheckIn(data.checkIn)
+            setCheckOut(data.checkOut)
+            setMaxGuests(data.maxGuests)
+          }
+        )
     }, [id])
 
     function inputHeader(text) {
@@ -48,25 +62,39 @@ export default function PlacesFormPage() {
         );
       }
 
-      const addNewPlace =async (e) => {
+      const savePlace =async (e) => {
         e.preventDefault()
         const placeData = {title,
-           address,
-           addedPhotos1,
-             addedPhotos2,
+              address,
+              addedPhotos1,
+              addedPhotos2,
               description,
-               perks,
-                checkIn,
-                checkOut,
-                 extraInfo,
-                  maxGuests}
-        try {
-            await axios.post('/places', placeData)
-            alert('salio todo bien perrito')
-            setRedirect(true)
-        } catch (error) {
-            alert('ups se rompio algo')
-            console.log(error)
+              perks,
+              checkIn,
+              checkOut,
+              extraInfo,
+              maxGuests}
+        if(id){
+         try {
+             await axios.put('/places', {
+              id,
+              ...placeData
+             })
+             alert('salio todo bien perrito')
+             setRedirect(true)
+         } catch (error) {
+             alert('ups se rompio algo')
+             console.log(error)
+         }
+        } else {
+         try {
+             await axios.post('/places', placeData)
+             alert('salio todo bien perrito')
+             setRedirect(true)
+         } catch (error) {
+             alert('ups se rompio algo')
+             console.log(error)
+         }
         }
       }
 
@@ -78,7 +106,7 @@ export default function PlacesFormPage() {
   return (
         <div>
         <AccountNav/>
-          <form onSubmit={addNewPlace}>
+          <form onSubmit={savePlace}>
             {preInput('Title', 'Title should be short and attractive')}
             <input type="text" placeholder="title" value={title} onChange={e => setTitle(e.target.value)}/>
             {preInput('Address', 'The Address')}
