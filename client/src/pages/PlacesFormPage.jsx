@@ -21,6 +21,7 @@ export default function PlacesFormPage() {
     const [checkOut, setCheckOut] = useState('')
     const [maxGuests, setMaxGuests] = useState(1)
     const [redirect, setRedirect] = useState(false)
+    const [price, setPrice] = useState(0)
 
     useEffect(() => {
         if(!id) return;
@@ -38,6 +39,7 @@ export default function PlacesFormPage() {
               setCheckIn(data.checkIn)
               setCheckOut(data.checkOut)
               setMaxGuests(data.maxGuests)
+              setPrice(data.price)
             }
           )
         } catch (error) {
@@ -75,7 +77,8 @@ export default function PlacesFormPage() {
               checkIn,
               checkOut,
               extraInfo,
-              maxGuests}
+              maxGuests,
+              price}
         if(id){
          try {
              await axios.put('/places', {
@@ -125,7 +128,7 @@ export default function PlacesFormPage() {
             {preInput('Extra Info', 'Some Extra Info')}
             <textarea value={extraInfo} onChange={e => setExtraInfo(e.target.value)} />
             {preInput('Check In, Out, Max Guests', 'That shit')}
-            <div className='grid gap-2 sm:grid-cols-3'>
+            <div className='grid gap-2 grid-cols-2 md:grid-cols-4'>
               <div>
                 <h3 className="mt-2 mb-2">Check In</h3>
                 <input type="text" value={checkIn} onChange={e => setCheckIn(e.target.value)} />
@@ -137,6 +140,10 @@ export default function PlacesFormPage() {
               <div>
                 <h3 className="mt-2 mb-2">Guests</h3>
                 <input type="number" value={maxGuests} onChange={e => setMaxGuests(e.target.value)} />
+              </div>
+              <div>
+                <h3 className="mt-2 mb-2">Price per night</h3>
+                <input type="number" value={price} onChange={e => setPrice(e.target.value)} />
               </div>
             </div>
             <div>
