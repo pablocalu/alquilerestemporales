@@ -148,7 +148,13 @@ export default function PlacePage() {
           Check-out: {place.checkOut} <br/>
           Max Guests: {place.maxGuests}
         </div>
-        <div></div>
+        <div>
+          <div className='bg-white shadow p-4 rounded-2xl'>
+            <h2 className='text-2xl text-center'></h2>
+                Price: ${place.price} /per night
+          </div>
+            <button className='primary'>Book this place</button>
+        </div>
       </div>
     </div>
   );
