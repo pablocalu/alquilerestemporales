@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { differenceInCalendarDays } from 'date-fns';
 import axios from 'axios'
+import { UserContext } from '../UserContext';
+import { Navigate } from 'react-router-dom';
 
 export default function BookingWidget({ place }) {
   const [name, setName] = useState('');
@@ -9,6 +11,13 @@ export default function BookingWidget({ place }) {
   const [checkOut, setCheckOut] = useState('');
   const [numberGuests, setNumberGuests] = useState(1);
   const [redirect, setRedirect] = useState(false)
+  const { user } = useContext(UserContext)
+
+  useEffect(() => {
+    if(user){
+      setName(user.name)
+    }
+  })
 
   let numberOfNights = 0;
   let bookingPrice = 0;
@@ -22,7 +31,7 @@ export default function BookingWidget({ place }) {
   }
 
   const bookThisPlace = async () => {
-    await axios.post('/booking', { checkIn, checkOut, numberGuests, name, phone, place: place._id, price: bookingPrice  })
+    const response = await axios.post('/booking', { checkIn, checkOut, numberGuests, name, phone, place: place._id, price: bookingPrice  })
     const bookingId = response.data._id
     setRedirect(`/account/bookings/${bookingId}`)
   }

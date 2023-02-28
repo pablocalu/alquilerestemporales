@@ -15,7 +15,6 @@ export default function PhotosUploader2({addedPhotos2, onChange}) {
           headers: {'Content-type': 'multipart/form-data'}
         }).then( response => {
           const { data:filenames } = response;
-          console.log(filenames)
           onChange(prev => {
             return [...prev, ...filenames]
           })
