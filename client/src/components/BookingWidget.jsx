@@ -1,18 +1,34 @@
 import React, { useState } from 'react';
 import { differenceInCalendarDays } from 'date-fns';
+import axios from 'axios'
 
 export default function BookingWidget({ place }) {
   const [name, setName] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [phone, setPhone] = useState('');
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [numberGuests, setNumberGuests] = useState(1);
+  const [redirect, setRedirect] = useState(false)
+
   let numberOfNights = 0;
+  let bookingPrice = 0;
+
   if (checkIn && checkOut) {
     numberOfNights = differenceInCalendarDays(
       new Date(checkOut),
       new Date(checkIn)
     );
+    bookingPrice = numberOfNights * place.price
+  }
+
+  const bookThisPlace = async () => {
+    await axios.post('/booking', { checkIn, checkOut, numberGuests, name, phone, place: place._id, price: bookingPrice  })
+    const bookingId = response.data._id
+    setRedirect(`/account/bookings/${bookingId}`)
+  }
+
+  if(redirect){
+    return <Navigate to={redirect} />
   }
 
   return (
@@ -61,8 +77,8 @@ export default function BookingWidget({ place }) {
             <label>Phone Number</label>
             <input
               type="tel"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
         )}
@@ -70,12 +86,12 @@ export default function BookingWidget({ place }) {
           <div className="py-3 px-4 border-t">
             <span>
               Book this place {numberOfNights} nights for $
-              {numberOfNights * place.price}
+              {bookingPrice}
             </span>
           </div>
         )}
       </div>
-      <button className="primary mb-4 mt-4">Book this place</button>
+      <button onClick={bookThisPlace} className="primary mb-4 mt-4">Book this place</button>
     </div>
   );
 }

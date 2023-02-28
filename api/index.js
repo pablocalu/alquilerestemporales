@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { default: mongoose } = require('mongoose');
 const User = require('./models/User');
 const Place = require('./models/Place');
+const Booking = require('./models/Booking')
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const fs = require('fs');
@@ -207,7 +208,16 @@ app.get('/places', async (req, res) => {
 })
 
 app.post('/booking', (req,res) => {
-  const { place, checkIn, checkOut, numberOfGuests, name, phone } = req.body
+  const { place, checkIn, checkOut, numberOfGuests, name, phone, price } = req.body
+
+  Booking.create({
+    place, checkIn, checkOut, numberOfGuests, name, phone, price
+  }).then((doc)=> {
+    res.json(doc)
+  }).catch((err) => {
+    throw err
+  })
+
 })
 
 app.listen(4000);
