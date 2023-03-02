@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -9,13 +10,13 @@ export default function BookingPage() {
   useEffect(() => {
     if(id){
       axios.get('/bookings').then(response => {
-        const foundBooking = response.data.find(({id}) => _id === id)
+        const foundBooking = response.data.find(({ _id }) => _id === id)
         if(foundBooking){
           setBooking(foundBooking)
         }
       })
     }
-  })
+  }, [])
 
   if(!booking){
     return ''
@@ -23,7 +24,7 @@ export default function BookingPage() {
 
   return (
     <div>
-      hola
+      <h1>{booking.place.title}</h1>
     </div>
   )
 }
