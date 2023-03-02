@@ -6,7 +6,7 @@ export default function GoogleMap({ lattitude, long }) {
 
 
   const loader = new Loader({
-        apiKey: "AIzaSyDfj-5HvlKQ8Z-zrSE4Pi7F9R5NA7AD_yM",
+        apiKey: ,
         version: "weekly",
   });
    
