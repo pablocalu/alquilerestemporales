@@ -1,8 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { differenceInCalendarDays } from 'date-fns';
+import React, { useContext, useEffect, useState, useRef } from 'react';
+import { addDays, differenceInCalendarDays } from 'date-fns';
 import axios from 'axios'
 import { UserContext } from '../UserContext';
 import { Navigate } from 'react-router-dom';
+import 'react-date-range/dist/styles.css'; 
+import 'react-date-range/dist/theme/default.css'; 
+import { DateRange } from 'react-date-range';
+
 
 export default function BookingWidget({ place }) {
   const [name, setName] = useState('');
@@ -11,12 +15,27 @@ export default function BookingWidget({ place }) {
   const [checkOut, setCheckOut] = useState('');
   const [numberGuests, setNumberGuests] = useState(1);
   const [redirect, setRedirect] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: 'selection'
+    }
+  ])
+
+  const refOne = useRef(null)
   const { user } = useContext(UserContext)
+
+  const today = Date.now();
+  const todayFormated = new Date(today);
+  const timeFormated = todayFormated.toISOString().slice(0, 10)
 
   useEffect(() => {
     if(user){
       setName(user.name)
     }
+    document.addEventListener("click", hideOnClickOutside, true)
   })
 
   let numberOfNights = 0;
@@ -36,12 +55,37 @@ export default function BookingWidget({ place }) {
     setRedirect(`/account/bookings/${bookingId}`)
   }
 
+  const handleSelect = (dates) => {
+    console.log(dates)
+    setRange([dates.selection])
+  }
+
+  const hideOnClickOutside = (e) => {
+    if( refOne.current && !refOne.current.contains(e.target) ) {
+      setOpen(false)
+    }
+  }
+
   if(redirect){
     return <Navigate to={redirect} />
   }
 
   return (
     <div>
+      <button onClick={ () => setOpen(open => !open) }>Select your date</button>
+      <div ref={refOne}>
+      { open && 
+          <DateRange
+          onChange={handleSelect}
+          editableDateInputs={true}
+          moveRangeOnFirstSelection={false}
+          disabledDates={[new Date('2023-04-04')]}
+          ranges={range}
+          months={1}
+          direction={'horizontal'}
+        />
+      }
+      </div>
       <div className="bg-white shadow p-4 rounded-2xl">
         <h2 className="text-2xl text-center"></h2>
         Price: ${place.price} / per night
@@ -52,6 +96,7 @@ export default function BookingWidget({ place }) {
             <label>Check in:</label>
             <input
               type="date"
+              min={timeFormated}
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
             />
