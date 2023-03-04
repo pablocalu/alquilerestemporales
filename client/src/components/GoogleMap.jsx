@@ -9,6 +9,7 @@ export default function GoogleMap({ lattitude, long, place, id }) {
   });
 
   if (lattitude && long) {
+    console.log("lattitude")
     let marker;
     loader.load().then(() => {
       map = new google.maps.Map(document.getElementById('map'), {
