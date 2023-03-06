@@ -41,10 +41,10 @@ export default function BookingWidget({ place }) {
   let numberOfNights = 0;
   let bookingPrice = 0;
 
-  if (checkIn && checkOut) {
+  if (range.startDate && range.endDate) {
     numberOfNights = differenceInCalendarDays(
-      new Date(checkOut),
-      new Date(checkIn)
+      new Date(range[0].startDate),
+      new Date(range[0].endDate)
     );
     bookingPrice = numberOfNights * place.price
   }
@@ -56,8 +56,11 @@ export default function BookingWidget({ place }) {
   }
 
   const handleSelect = (dates) => {
-    console.log(dates)
+    
     setRange([dates.selection])
+    console.log(range)
+    console.log('start', new Date(range[0].startDate).toISOString().slice(0, 10))
+    console.log('end', new Date(range[0].endDate).toISOString().slice(0, 10))
   }
 
   const hideOnClickOutside = (e) => {
@@ -72,7 +75,14 @@ export default function BookingWidget({ place }) {
 
   return (
     <div>
-      <button onClick={ () => setOpen(open => !open) }>Select your date</button>
+
+      <div className="bg-white shadow p-4 rounded-2xl">
+        <h2 className="text-2xl text-center"></h2>
+        Price: ${place.price} / per night
+      </div>
+      <div className="border rounded-2xl mt-4">
+        <div className="flex">
+        <button onClick={ () => setOpen(open => !open) }>Select your date</button>
       <div ref={refOne}>
       { open && 
           <DateRange
@@ -86,13 +96,7 @@ export default function BookingWidget({ place }) {
         />
       }
       </div>
-      <div className="bg-white shadow p-4 rounded-2xl">
-        <h2 className="text-2xl text-center"></h2>
-        Price: ${place.price} / per night
-      </div>
-      <div className="border rounded-2xl mt-4">
-        <div className="flex">
-          <div className="py-3 px-4">
+{/*           <div className="py-3 px-4">
             <label>Check in:</label>
             <input
               type="date"
@@ -108,7 +112,7 @@ export default function BookingWidget({ place }) {
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
             />
-          </div>
+          </div> */}
         </div>
         <div className="py-3 px-4 border-t">
           <label>Number of guests:</label>
