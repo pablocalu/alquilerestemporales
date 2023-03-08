@@ -6,6 +6,7 @@ import { Navigate } from 'react-router-dom';
 import 'react-date-range/dist/styles.css'; 
 import 'react-date-range/dist/theme/default.css'; 
 import { DateRange, DatePicker } from 'react-date-range';
+import MultipleDatesPicker from '@ambiot/material-ui-multiple-dates-picker'
 
 
 export default function BookingWidget({ place }) {
@@ -16,15 +17,8 @@ export default function BookingWidget({ place }) {
   const [numberGuests, setNumberGuests] = useState(1);
   const [redirect, setRedirect] = useState(false)
   const [open, setOpen] = useState(false)
-  const [range, setRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: 'selection'
-    }
-  ])
 
-  const refOne = useRef(null)
+
   const { user } = useContext(UserContext)
 
   const today = Date.now();
@@ -35,20 +29,19 @@ export default function BookingWidget({ place }) {
     if(user){
       setName(user.name)
     }
-    document.addEventListener("click", hideOnClickOutside, true)
   })
 
   let numberOfNights = 0;
   let bookingPrice = 0;
 
-  if (range.startDate && range.endDate) {
+/*   if (range) {
     numberOfNights = differenceInCalendarDays(
-      new Date(range[0].startDate),
-      new Date(range[0].endDate)
+      new Date(range[0].endDate),
+      new Date(range[0].startDate)
     );
-    console.log('nights', numberOfNights)
+    
     bookingPrice = numberOfNights * place.price
-  }
+  } */
 
   const bookThisPlace = async () => {
     const response = await axios.post('/booking', { checkIn, checkOut, numberGuests, name, phone, place: place._id, price: bookingPrice  })
@@ -56,19 +49,9 @@ export default function BookingWidget({ place }) {
     setRedirect(`/account/bookings/${bookingId}`)
   }
 
-  const handleSelect = (dates) => {
-    
-    setRange([dates.selection])
-    console.log(range)
-    console.log('start', new Date(range[0].startDate).toISOString().slice(0, 10))
-    console.log('end', new Date(range[0].endDate).toISOString().slice(0, 10))
-  }
 
-  const hideOnClickOutside = (e) => {
-    if( refOne.current && !refOne.current.contains(e.target) ) {
-      setOpen(false)
-    }
-  }
+
+
 
   if(redirect){
     return <Navigate to={redirect} />
@@ -84,19 +67,17 @@ export default function BookingWidget({ place }) {
       <div className="border rounded-2xl mt-4">
         <div className="flex">
         <button onClick={ () => setOpen(open => !open) }>Select your date</button>
-      <div ref={refOne}>
-      { open && 
-          <DateRange
-          onChange={handleSelect}
-          editableDateInputs={true}
-          moveRangeOnFirstSelection={false}
-          disabledDates={[new Date('2023-04-04')]}
-          ranges={range}
-          months={1}
-          direction={'horizontal'}
-        />
-      }
-      </div>
+        <div>
+      <button onClick={() => setOpen(!open)}>
+        Select Dates
+      </button>
+      <MultipleDatesPicker
+        open={open}
+        selectedDates={[]}
+        onCancel={() => setOpen(false)}
+        onSubmit={dates => console.log('selected dates', dates)}
+      />
+    </div>
 {/*           <div className="py-3 px-4">
             <label>Check in:</label>
             <input
