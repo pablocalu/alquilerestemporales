@@ -11,7 +11,7 @@ export default function MapPage() {
   const [placeLat, setPlaceLat] = useState('')
   const [placeLong, setPlaceLong] = useState('')
 
-  Geocode.setApiKey("AIzaSyDfj-5HvlKQ8Z-zrSE4Pi7F9R5NA7AD_yM")
+  Geocode.setApiKey("")
   Geocode.setLanguage('en')
   Geocode.setRegion('ar')
   Geocode.setLocationType("ROOFTOP");

@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom';
 
 export default function GoogleMap({ lattitude, long, place, id }) {
   const loader = new Loader({
-    apiKey: 'notelamuestro',
+    apiKey: 'AIzaSyDfj-5HvlKQ8Z-zrSE4Pi7F9R5NA7AD_yM',
     version: 'weekly',
   });
 
   if (lattitude && long) {
-    console.log("lattitude")
     let marker;
     loader.load().then(() => {
       map = new google.maps.Map(document.getElementById('map'), {

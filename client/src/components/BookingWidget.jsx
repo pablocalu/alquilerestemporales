@@ -5,7 +5,7 @@ import { UserContext } from '../UserContext';
 import { Navigate } from 'react-router-dom';
 import 'react-date-range/dist/styles.css'; 
 import 'react-date-range/dist/theme/default.css'; 
-import { DateRange } from 'react-date-range';
+import { DateRange, DatePicker } from 'react-date-range';
 
 
 export default function BookingWidget({ place }) {
@@ -46,6 +46,7 @@ export default function BookingWidget({ place }) {
       new Date(range[0].startDate),
       new Date(range[0].endDate)
     );
+    console.log('nights', numberOfNights)
     bookingPrice = numberOfNights * place.price
   }
 
