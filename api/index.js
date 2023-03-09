@@ -207,12 +207,34 @@ app.get('/places', async (req, res) => {
   res.json( await Place.find())
 })
 
+
+
 app.post('/booking', async (req,res) => {
   const userData = await getUserDataFromToken(req)
-  const { place, checkIn, checkOut, numberOfGuests, name, phone, price } = req.body
+  const { place, dates, numberOfGuests, name, phone, price } = req.body
+
+/*   const doc = await Place.findById(place)
+  console.log('soy el full doc', doc)
+
+  doc.updateOne(
+    {
+      $push: { unavailableDates: dates}
+    }
+  ) */
+
+  const doc = await Place.updateOne(
+    { _id: place }, 
+    { $push: { unavailableDates: dates } }
+);
+console.log(doc)
+/*     doc.set({
+      unavailableDates : {$concatArrays: [unavailableDates, dates]}
+    })
+    doc.save() */
+    console.log('soy el doc actualizado en teoria', doc)
 
   Booking.create({
-    place, checkIn, checkOut, numberOfGuests, name, phone, price, user: userData.id
+    place, dates, numberOfGuests, name, phone, price, user: userData.id
   }).then((doc)=> {
     res.json(doc)
   }).catch((err) => {

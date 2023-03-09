@@ -12,11 +12,10 @@ import MultipleDatesPicker from '@ambiot/material-ui-multiple-dates-picker'
 export default function BookingWidget({ place }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
   const [numberGuests, setNumberGuests] = useState(1);
   const [redirect, setRedirect] = useState(false)
   const [open, setOpen] = useState(false)
+  const [dates, setDates] = useState([])
 
 
   const { user } = useContext(UserContext)
@@ -25,10 +24,15 @@ export default function BookingWidget({ place }) {
   const todayFormated = new Date(today);
   const timeFormated = todayFormated.toISOString().slice(0, 10)
 
+  let noDates = place.unavailableDates.map( date => (
+    new Date(date.slice(0, 10))
+  ))
   useEffect(() => {
     if(user){
       setName(user.name)
     }
+    console.log(place.unavailableDates)
+    console.log(noDates)
   })
 
   let numberOfNights = 0;
@@ -42,10 +46,20 @@ export default function BookingWidget({ place }) {
     
     bookingPrice = numberOfNights * place.price
   } */
+  
+  numberOfNights =  dates.length
+  bookingPrice = numberOfNights * place.price
+
+  const handleDates = (dates) => {
+    setDates(dates)
+    console.log(dates)
+    setOpen(false)
+  }
 
   const bookThisPlace = async () => {
-    const response = await axios.post('/booking', { checkIn, checkOut, numberGuests, name, phone, place: place._id, price: bookingPrice  })
+    const response = await axios.post('/booking', {dates, numberGuests, name, phone, place: place._id, price: bookingPrice  })
     const bookingId = response.data._id
+    console.log('soy la response del fornt', response)
     setRedirect(`/account/bookings/${bookingId}`)
   }
 
@@ -68,14 +82,16 @@ export default function BookingWidget({ place }) {
         <div className="flex">
         <button onClick={ () => setOpen(open => !open) }>Select your date</button>
         <div>
-      <button onClick={() => setOpen(!open)}>
+{/*       <button onClick={() => setOpen(!open)}>
         Select Dates
-      </button>
+      </button> */}
       <MultipleDatesPicker
         open={open}
-        selectedDates={[]}
+       disabledDates={noDates} 
+        selectedDates={dates ? dates : null}
         onCancel={() => setOpen(false)}
-        onSubmit={dates => console.log('selected dates', dates)}
+        onSubmit={dates => handleDates(dates)}
+        submitButtonText={'Confirm'}
       />
     </div>
 {/*           <div className="py-3 px-4">
