@@ -16,6 +16,7 @@ export default function BookingPage() {
         }
       })
     }
+
   }, [])
 
   if(!booking){
@@ -24,6 +25,7 @@ export default function BookingPage() {
 
   return (
     <div>
+      {console.log(booking)}
       <h1>{booking.place.title}</h1>
     </div>
   )

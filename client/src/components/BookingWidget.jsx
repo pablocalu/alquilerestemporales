@@ -25,14 +25,19 @@ export default function BookingWidget({ place }) {
   const timeFormated = todayFormated.toISOString().slice(0, 10)
 
   let noDates = place.unavailableDates.map( date => (
-    new Date(date.slice(0, 10))
+    new Date(date)
   ))
+  
   useEffect(() => {
     if(user){
       setName(user.name)
     }
-    console.log(place.unavailableDates)
-    console.log(noDates)
+    console.log('lo q viene del back',place.unavailableDates)
+    console.log('no dates', noDates)
+    if(dates){
+
+      console.log('esto mando al back', dates)
+    }
   })
 
   let numberOfNights = 0;
@@ -52,14 +57,12 @@ export default function BookingWidget({ place }) {
 
   const handleDates = (dates) => {
     setDates(dates)
-    console.log(dates)
     setOpen(false)
   }
 
   const bookThisPlace = async () => {
     const response = await axios.post('/booking', {dates, numberGuests, name, phone, place: place._id, price: bookingPrice  })
     const bookingId = response.data._id
-    console.log('soy la response del fornt', response)
     setRedirect(`/account/bookings/${bookingId}`)
   }
 

@@ -212,28 +212,15 @@ app.get('/places', async (req, res) => {
 app.post('/booking', async (req,res) => {
   const userData = await getUserDataFromToken(req)
   const { place, dates, numberOfGuests, name, phone, price } = req.body
+  
 
-/*   const doc = await Place.findById(place)
-  console.log('soy el full doc', doc)
-
-  doc.updateOne(
-    {
-      $push: { unavailableDates: dates}
-    }
-  ) */
-
-  const doc = await Place.updateOne(
+  await Place.updateOne(
     { _id: place }, 
     { $push: { unavailableDates: dates } }
 );
-console.log(doc)
-/*     doc.set({
-      unavailableDates : {$concatArrays: [unavailableDates, dates]}
-    })
-    doc.save() */
-    console.log('soy el doc actualizado en teoria', doc)
 
-  Booking.create({
+
+  await Booking.create({
     place, dates, numberOfGuests, name, phone, price, user: userData.id
   }).then((doc)=> {
     res.json(doc)
@@ -254,6 +241,16 @@ function getUserDataFromToken(req) {
 app.get('/bookings', async (req,res) => {
   const userData = await getUserDataFromToken(req)
   res.json(await Booking.find({user: userData.id}).populate('place'))
+})
+
+app.put('/cancel', async (req, res) => {
+  const userData = await getUserDataFromToken(req)
+  const { place, dates } = req.body
+  //recibir el id del lugar para cancelar la reserva de ese booking
+  //primero recibo el id del lugar, busco el lugar en la db si esta el lugar busco
+  //las fechas, elimino las fechas que envio por dates.
+  //luego recibo el id del booking
+  //elimino ese booking
 })
 
 app.listen(4000);
