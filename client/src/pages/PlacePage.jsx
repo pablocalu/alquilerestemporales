@@ -21,7 +21,7 @@ export default function PlacePage() {
     if(!place) return;
   },[place])
 
-  if (!place) return <h1>Loading...</h1>;
+  if (!place) return <h1>Loading....</h1>;
 
   return (
     <div className="mt-8 bg-gray-100 -mx-8 px-8 pt-8 max-w-4xl self-center">
