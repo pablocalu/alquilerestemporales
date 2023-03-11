@@ -16,8 +16,17 @@ export default function BookingPage() {
         }
       })
     }
-
   }, [])
+
+
+  const handleCancel = async () => {
+
+    response = await axios.put('/cancel', {
+      place : booking.place,
+    })
+
+    console.log(response)
+  }
 
   if(!booking){
     return ''
@@ -27,6 +36,7 @@ export default function BookingPage() {
     <div>
       {console.log(booking)}
       <h1>{booking.place.title}</h1>
+      <button onClick={handleCancel}>cancel</button>
     </div>
   )
 }
