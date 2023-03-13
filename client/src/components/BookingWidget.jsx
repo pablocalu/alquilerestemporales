@@ -20,27 +20,15 @@ export default function BookingWidget({ place }) {
 
   const { user } = useContext(UserContext)
 
-  const today = Date.now();
-  const todayFormated = new Date(today);
-  const timeFormated = todayFormated.toISOString().slice(0, 10)
-
-/*   let noDates = place.unavailableDates.map( date => (
-    new Date(date)
-  )) */
-
   let noDates = place.booking.map( date => (
     date.dates.map( date1 => (
       new Date(date1)
     ))
   ))
-
-  let noDates2 = [new Date(place.booking[0].dates[0])]
   
   useEffect(() => {
     if(user){
       setName(user.name)
-      console.log(noDates)
-     console.log(noDates2)
     }
     if(dates){
       console.log('esto mando al back', dates)
@@ -50,14 +38,6 @@ export default function BookingWidget({ place }) {
   let numberOfNights = 0;
   let bookingPrice = 0;
 
-/*   if (range) {
-    numberOfNights = differenceInCalendarDays(
-      new Date(range[0].endDate),
-      new Date(range[0].startDate)
-    );
-    
-    bookingPrice = numberOfNights * place.price
-  } */
   
   numberOfNights =  dates.length
   bookingPrice = numberOfNights * place.price

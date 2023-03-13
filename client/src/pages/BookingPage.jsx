@@ -1,11 +1,14 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 export default function BookingPage() {
 
   const { id } = useParams()
   const [booking, setBooking] = useState(null)
+
+  const [redirect, setRedirect] = useState(false)
 
   useEffect(() => {
     if(id){
@@ -21,22 +24,27 @@ export default function BookingPage() {
 
   const handleCancel = async () => {
 
-    response = await axios.put('/cancel', {
-      place : booking.place,
+    await axios.put('/cancel', {
+      id
     })
 
-    console.log(response)
+      setRedirect(true)
+    
   }
 
   if(!booking){
     return ''
   }
 
+  if(redirect){
+    return <Navigate to={'/account/bookings'} />
+  }
+
   return (
     <div>
-      {console.log(booking)}
+      {console.log(id)}
       <h1>{booking.place.title}</h1>
-      <button onClick={handleCancel}>cancel</button>
+      <button onClick={() => handleCancel()}>cancel</button>
     </div>
   )
 }
