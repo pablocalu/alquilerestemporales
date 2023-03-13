@@ -5,7 +5,6 @@ import { UserContext } from '../UserContext';
 import { Navigate } from 'react-router-dom';
 import 'react-date-range/dist/styles.css'; 
 import 'react-date-range/dist/theme/default.css'; 
-import { DateRange, DatePicker } from 'react-date-range';
 import MultipleDatesPicker from '@ambiot/material-ui-multiple-dates-picker'
 
 
@@ -29,9 +28,6 @@ export default function BookingWidget({ place }) {
   useEffect(() => {
     if(user){
       setName(user.name)
-    }
-    if(dates){
-      console.log('esto mando al back', dates)
     }
   })
 
@@ -72,9 +68,6 @@ export default function BookingWidget({ place }) {
         <div className="flex">
         <button onClick={ () => setOpen(open => !open) }>Select your date</button>
         <div>
-{/*       <button onClick={() => setOpen(!open)}>
-        Select Dates
-      </button> */}
       <MultipleDatesPicker
         open={open}
        disabledDates={noDates.flat()} 
@@ -84,23 +77,6 @@ export default function BookingWidget({ place }) {
         submitButtonText={'Confirm'}
       />
     </div>
-{/*           <div className="py-3 px-4">
-            <label>Check in:</label>
-            <input
-              type="date"
-              min={timeFormated}
-              value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
-            />
-          </div>
-          <div className="py-3 px-4 border-l">
-            <label>Check out:</label>
-            <input
-              type="date"
-              value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
-            />
-          </div> */}
         </div>
         <div className="py-3 px-4 border-t">
           <label>Number of guests:</label>

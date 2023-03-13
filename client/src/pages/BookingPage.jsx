@@ -23,13 +23,10 @@ export default function BookingPage() {
 
 
   const handleCancel = async () => {
-
     await axios.put('/cancel', {
       id
     })
-
-      setRedirect(true)
-    
+      setRedirect(true)  
   }
 
   if(!booking){
@@ -42,7 +39,6 @@ export default function BookingPage() {
 
   return (
     <div>
-      {console.log(id)}
       <h1>{booking.place.title}</h1>
       <button onClick={() => handleCancel()}>cancel</button>
     </div>
