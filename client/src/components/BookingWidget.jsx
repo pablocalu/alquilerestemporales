@@ -24,18 +24,25 @@ export default function BookingWidget({ place }) {
   const todayFormated = new Date(today);
   const timeFormated = todayFormated.toISOString().slice(0, 10)
 
-  let noDates = place.unavailableDates.map( date => (
+/*   let noDates = place.unavailableDates.map( date => (
     new Date(date)
+  )) */
+
+  let noDates = place.booking.map( date => (
+    date.dates.map( date1 => (
+      new Date(date1)
+    ))
   ))
+
+  let noDates2 = [new Date(place.booking[0].dates[0])]
   
   useEffect(() => {
     if(user){
       setName(user.name)
+      console.log(noDates)
+     console.log(noDates2)
     }
-    console.log('lo q viene del back',place.unavailableDates)
-    console.log('no dates', noDates)
     if(dates){
-
       console.log('esto mando al back', dates)
     }
   })
@@ -90,7 +97,7 @@ export default function BookingWidget({ place }) {
       </button> */}
       <MultipleDatesPicker
         open={open}
-       disabledDates={noDates} 
+       disabledDates={noDates.flat()} 
         selectedDates={dates ? dates : null}
         onCancel={() => setOpen(false)}
         onSubmit={dates => handleDates(dates)}

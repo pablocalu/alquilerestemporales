@@ -12,7 +12,6 @@ const placeSchema = new mongoose.Schema({
     checkIn: Number,
     checkOut: Number,
     maxGuests: Number,
-    unavailableDates: [String],
     booking: { type:[mongoose.Schema.Types.ObjectId], required: true, ref:'Booking'},
     price: Number
 })

@@ -161,7 +161,7 @@ app.get('/user-places', (req,res) => {
 
 app.get('/places/:id', async (req,res) => {
   const {id} = req.params;
-  res.json(await Place.findById(id));
+  res.json(await Place.findById(id).populate('booking'));
 });
 
 app.put('/places', async (req, res) => {
@@ -213,17 +213,18 @@ app.post('/booking', async (req,res) => {
   const userData = await getUserDataFromToken(req)
   const { place, dates, numberOfGuests, name, phone, price } = req.body
 
-  console.log('hola')
   
   try {
-    await Place.updateOne(
+/*     await Place.updateOne(
       { _id: place }, 
       { $push: { unavailableDates: dates } }
-    );
+    ); */
 
     const booking = await Booking.create({
       place, dates, numberOfGuests, name, phone, price, user: userData.id
     })
+
+    console.log(booking, 'soy el booking del back')
 
     await Place.updateOne(
       { _id: place }, 
