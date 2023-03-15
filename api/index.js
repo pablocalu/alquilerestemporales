@@ -263,9 +263,15 @@ app.put('/cancel', async (req, res) => {
 
 app.get('/findplaces', async (req, res) => {
   const { name } = req.query
-  const allPlaces = await Place.find()
-  const foundPlace = allPlaces.filter( p => p.address.toLowerCase().includes(name.toLocaleLowerCase()))
-  res.json(foundPlace)
+  if(name){
+    const allPlaces = await Place.find()
+    const foundPlace = allPlaces.filter( p => p.address.toLowerCase().includes(name.toLocaleLowerCase()))
+    res.json(foundPlace)
+  }
+  else {
+    res.json([])
+  }
+
 
 })
 

@@ -14,6 +14,7 @@ import BookingsPage from './pages/BookingsPage'
 import BookingPage from './pages/BookingPage'
 import MapPage from './pages/MapPage'
 
+
 axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.withCredentials = true
 
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <UserContextProvider>
+
       <Routes>
         <Route path='/' element={<Layout/>}>
           <Route index element={<IndexPage/>}/>
@@ -36,6 +38,7 @@ function App() {
           <Route path='/account/bookings/:id'  element={<BookingPage/>} />
         </Route>
       </Routes>
+
     </UserContextProvider>
 
   )

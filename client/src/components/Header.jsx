@@ -8,6 +8,7 @@ export default function Header() {
 
   const { user } = useContext(UserContext)
 
+
   return (
     <div>
             <header className='flex justify-between'>

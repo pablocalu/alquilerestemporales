@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
 import { getPlaces } from '../methods/SearchMethod';
+import { UserContext } from '../UserContext';
+import { useContext } from 'react';
 
 export default function SearchBar() {
 
+
   const [search, setSearch] = useState('')
+  const { setSearchResult } = useContext(UserContext)
 
   const handleInputChange = (e) => {
     e.preventDefault()
     setSearch(e.target.value)
+
   }
 
-  const handleSubmitSearch = (e) => {
+  const handleSubmitSearch = async (e) => {
     e.preventDefault()
-    getPlaces(search)
+    const result = await getPlaces(search)
+    setSearchResult(result)
   }
 
 
