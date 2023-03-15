@@ -253,20 +253,19 @@ app.put('/cancel', async (req, res) => {
   const userData = await getUserDataFromToken(req)
   const { id } = req.body
 
- try {
+  try {
     await Booking.findByIdAndDelete({ _id : id})
     res.json('ok')
   } catch (error) {
     throw error
   }
-  
-  
-  //recibir el id del lugar para cancelar la reserva de ese booking
-  //primero recibo el id del lugar, busco el lugar en la db si esta el lugar busco
-  //las fechas, elimino las fechas que envio por dates.
-  //luego recibo el id del booking
-  //elimino ese booking
+})
 
+app.get('/findplaces', async (req, res) => {
+  const { name } = req.query
+  const allPlaces = await Place.find()
+  const foundPlace = allPlaces.filter( p => p.address.toLowerCase().includes(name.toLocaleLowerCase()))
+  res.json(foundPlace)
 
 })
 

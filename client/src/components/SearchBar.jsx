@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { getPlaces } from '../methods/SearchMethod';
 
 export default function SearchBar() {
+
+  const [search, setSearch] = useState('')
+
+  const handleInputChange = (e) => {
+    e.preventDefault()
+    setSearch(e.target.value)
+  }
+
+  const handleSubmitSearch = (e) => {
+    e.preventDefault()
+    getPlaces(search)
+  }
+
+
   return (
-    <div className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-200">
+    <form className="flex gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-200" onSubmit={handleSubmitSearch}>
       <div>Anywhere</div>
       <div className="border-l border-gray-300"></div>
       <div>Any week</div>
       <div className="border-l border-gray-300"></div>
       <div>Add guests</div>
+      <input type="text" value={search} onChange={(e) => handleInputChange(e)}/>
       <button className="bg-primary text-white p-1 rounded-full">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -24,6 +40,6 @@ export default function SearchBar() {
           />
         </svg>
       </button>
-    </div>
+    </form>
   );
 }
