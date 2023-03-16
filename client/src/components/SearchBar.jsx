@@ -7,7 +7,7 @@ export default function SearchBar() {
 
 
   const [search, setSearch] = useState('')
-  const { setSearchResult } = useContext(UserContext)
+  const { setSearchResult, searchResult } = useContext(UserContext)
 
   const handleInputChange = (e) => {
     e.preventDefault()
@@ -19,6 +19,9 @@ export default function SearchBar() {
     e.preventDefault()
     const result = await getPlaces(search)
     setSearchResult(result)
+    console.log(searchResult)
+    setSearch('')
+    
   }
 
 

@@ -13,6 +13,7 @@ import PlacePage from './pages/PlacePage'
 import BookingsPage from './pages/BookingsPage'
 import BookingPage from './pages/BookingPage'
 import MapPage from './pages/MapPage'
+import SearchPage from './pages/SearchPage'
 
 
 axios.defaults.baseURL = 'http://localhost:4000'
@@ -36,6 +37,7 @@ function App() {
           <Route path='/place/map/:id' element={<MapPage/>}/>
           <Route path='/account/bookings'  element={<BookingsPage/>} />
           <Route path='/account/bookings/:id'  element={<BookingPage/>} />
+          <Route path='/s/places'  element={<SearchPage/>} />
         </Route>
       </Routes>
 
