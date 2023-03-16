@@ -1,9 +1,9 @@
 import axios from "axios"
 
 export const getPlaces = async (name) => {
+    
     try {
-        const placeName = await axios.get(`/findplaces?name=${name}`)
-        return placeName.data
+        return await axios.get(`/findplaces?name=${name}`).then(response => response.data)
     } catch (error) {
         throw error
     }

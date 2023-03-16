@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { getPlaces } from '../methods/SearchMethod';
 import { UserContext } from '../UserContext';
 import { useContext } from 'react';
+import axios from 'axios';
 
 export default function SearchBar() {
 
@@ -12,17 +13,17 @@ export default function SearchBar() {
   const handleInputChange = (e) => {
     e.preventDefault()
     setSearch(e.target.value)
-
   }
+
 
   const handleSubmitSearch = async (e) => {
     e.preventDefault()
-    const result = await getPlaces(search)
-    setSearchResult(result)
+    setSearchResult(    await getPlaces(search))
     console.log(searchResult)
     setSearch('')
-    
+    /* window.location.href = '/s/places' */
   }
+
 
 
   return (
