@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
 import PlaceCard from '../components/PlaceCard'
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { UserContext } from '../UserContext';
+import { useContext } from 'react';
 
 export default function SearchPage() {
 
 
-const { searchResult } = useContext(UserContext);
-const [loadPlaces, setLoadPlaces] = useState(null)
+const { searchResult, user } = useContext(UserContext);
+const [ loadResults, setLoadResults] = useState()
 
-/* useEffect(() => {
-  setLoadPlaces(searchResult)
-}, [loadPlaces])
- */
-if(!searchResult) return <h1>Loading.</h1>
+useEffect(() => {
+/*   setLoadResults(searchResult)
+  if(loadResults){
+    return
+  } */
+}, []) 
+ 
+/* if(!loadPlaces) return <h1>Loading.</h1> */
 
 
   return (
     <div className="mt-8 grid gap-x-6 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {console.log(searchResult)}
     {searchResult.length > 0 &&
       searchResult.map((place) => <PlaceCard place={place} />)}
   </div>

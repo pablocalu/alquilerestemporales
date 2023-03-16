@@ -23,7 +23,6 @@ function App() {
 
   return (
     <UserContextProvider>
-
       <Routes>
         <Route path='/' element={<Layout/>}>
           <Route index element={<IndexPage/>}/>
@@ -40,7 +39,6 @@ function App() {
           <Route path='/s/places'  element={<SearchPage/>} />
         </Route>
       </Routes>
-
     </UserContextProvider>
 
   )

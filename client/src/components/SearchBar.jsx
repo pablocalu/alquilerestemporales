@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { getPlaces } from '../methods/SearchMethod';
 import { UserContext } from '../UserContext';
 import { useContext } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchBar() {
 
 
   const [search, setSearch] = useState('')
+  const navigate = useNavigate()
   const { setSearchResult, searchResult } = useContext(UserContext)
 
   const handleInputChange = (e) => {
@@ -18,9 +19,11 @@ export default function SearchBar() {
 
   const handleSubmitSearch = async (e) => {
     e.preventDefault()
-    setSearchResult(    await getPlaces(search))
-    console.log(searchResult)
+    await setSearchResult(await getPlaces(search))
     setSearch('')
+    navigate('/s/places')
+    
+
     /* window.location.href = '/s/places' */
   }
 
