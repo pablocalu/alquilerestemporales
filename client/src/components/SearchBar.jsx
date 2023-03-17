@@ -22,9 +22,6 @@ export default function SearchBar() {
     await setSearchResult(await getPlaces(search))
     setSearch('')
     navigate('/s/places')
-    
-
-    /* window.location.href = '/s/places' */
   }
 
 
