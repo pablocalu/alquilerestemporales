@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PlaceCard from '../components/PlaceCard'
 import { useEffect } from 'react';
 import { UserContext } from '../UserContext';
@@ -8,16 +8,9 @@ export default function SearchPage() {
 
 
 const { searchResult, user } = useContext(UserContext);
-const [ loadResults, setLoadResults] = useState()
 
 useEffect(() => {
-/*   setLoadResults(searchResult)
-  if(loadResults){
-    return
-  } */
 }, []) 
- 
-/* if(!loadPlaces) return <h1>Loading.</h1> */
 
 
   return (
