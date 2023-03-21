@@ -1,16 +1,11 @@
-/* const express = require('express'); */
-/* const cors = require('cors'); */
+
 const jwt = require('jsonwebtoken');
-/* const { default: mongoose } = require('mongoose'); */
-const User = require('./models/User');
-const Place = require('./models/Place');
-const Booking = require('./models/Booking')
+const User = require('../models/User');
+const Place = require('../models/Place');
+const Booking = require('../models/Booking')
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const fs = require('fs');
-/* const cookieParser = require('cookie-parser'); */
-/* require('dotenv').config(); */
-/* const router = express(); */
 const bcrypt = require('bcryptjs');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
@@ -19,17 +14,6 @@ const jwtSecret = 'thisisunsecreto';
 const { Router } = require('express');
 const router = Router();
 
-/* app.use(express.json()); */
-/* app.use(cookieParser()); */
-/* app.use('/uploads', express.static(__dirname + '/uploads')); */
-/* app.use(
-  cors({
-    credentials: true,
-    origin: 'http://127.0.0.1:5173',
-  })
-); */
-
-/* mongoose.connect(process.env.MONGO_URL); */
 
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;

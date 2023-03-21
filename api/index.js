@@ -1,6 +1,6 @@
-const server = require('./app.js');
+const server = require('./server/app.js');
 require('dotenv').config();
-const database = require('./db.js');
+const database = require('./db/db.js');
 const PORT = process.env.PORT;
 
 database.on('error', (error) => {
