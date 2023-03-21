@@ -7,7 +7,7 @@ const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
-
+const { getUserDataFromToken } = require('../controller/userFromToken')
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'thisisunsecreto';
 
@@ -211,14 +211,14 @@ router.post('/booking', async (req,res) => {
   }
 })
 
-function getUserDataFromToken(req) {
+/* function getUserDataFromToken(req) {
   return new Promise((resolve, reject)=> {
     jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
       if(err) throw err;
       resolve(userData)
     })
   })
-}
+} */
 
 router.get('/bookings', async (req,res) => {
   const userData = await getUserDataFromToken(req)
