@@ -1,38 +1,37 @@
-const express = require('express');
-const cors = require('cors');
+/* const express = require('express'); */
+/* const cors = require('cors'); */
 const jwt = require('jsonwebtoken');
-const { default: mongoose } = require('mongoose');
+/* const { default: mongoose } = require('mongoose'); */
 const User = require('./models/User');
 const Place = require('./models/Place');
 const Booking = require('./models/Booking')
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const fs = require('fs');
-const cookieParser = require('cookie-parser');
-require('dotenv').config();
-const app = express();
+/* const cookieParser = require('cookie-parser'); */
+/* require('dotenv').config(); */
+/* const router = express(); */
 const bcrypt = require('bcryptjs');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'thisisunsecreto';
 
-app.use(express.json());
-app.use(cookieParser());
-app.use('/uploads', express.static(__dirname + '/uploads'));
-app.use(
+const { Router } = require('express');
+const router = Router();
+
+/* app.use(express.json()); */
+/* app.use(cookieParser()); */
+/* app.use('/uploads', express.static(__dirname + '/uploads')); */
+/* app.use(
   cors({
     credentials: true,
     origin: 'http://127.0.0.1:5173',
   })
-);
+); */
 
-mongoose.connect(process.env.MONGO_URL);
+/* mongoose.connect(process.env.MONGO_URL); */
 
-app.get('/test', (req, res) => {
-  res.json('oki doki');
-});
-
-app.post('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -47,7 +46,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const userDoc = await User.findOne({ email });
   if (userDoc) {
@@ -73,7 +72,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.get('/profile', (req, res) => {
+router.get('/profile', (req, res) => {
   const { token } = req.cookies;
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -86,11 +85,11 @@ app.get('/profile', (req, res) => {
   }
 });
 
-app.post('/logout', (req, res) => {
+router.post('/logout', (req, res) => {
   res.cookie('token', '').json(true);
 });
 
-app.post('/upload-by-link', async (req, res) => {
+router.post('/upload-by-link', async (req, res) => {
   const { link } = req.body;
   const newName = 'photo' + Date.now() + '.jpg';
   await imageDownloader.image({
@@ -102,7 +101,7 @@ app.post('/upload-by-link', async (req, res) => {
 
 
 const photosMiddleware = multer({ dest: 'uploads/' });
-app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
+router.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
   const uploadedFiles = [];
   for (let i = 0; i < req.files.length; i++) {
     const { path, originalname } = req.files[i];
@@ -115,7 +114,7 @@ app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
   res.json(uploadedFiles);
 });
 
-app.post('/places', (req, res) => {
+router.post('/places', (req, res) => {
   const { token } = req.cookies;
   const {
     title,
@@ -151,7 +150,7 @@ app.post('/places', (req, res) => {
   });
 });
 
-app.get('/user-places', (req,res) => {
+router.get('/user-places', (req,res) => {
   const { token } = req.cookies;
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     const { id } = userData
@@ -159,12 +158,12 @@ app.get('/user-places', (req,res) => {
   })
 })
 
-app.get('/places/:id', async (req,res) => {
+router.get('/places/:id', async (req,res) => {
   const {id} = req.params;
   res.json(await Place.findById(id).populate('booking'));
 });
 
-app.put('/places', async (req, res) => {
+router.put('/places', async (req, res) => {
   const { token } = req.cookies;
   const {
     id,
@@ -203,13 +202,13 @@ app.put('/places', async (req, res) => {
   })
 })
 
-app.get('/places', async (req, res) => {
+router.get('/places', async (req, res) => {
   res.json( await Place.find())
 })
 
 
 
-app.post('/booking', async (req,res) => {
+router.post('/booking', async (req,res) => {
   const userData = await getUserDataFromToken(req)
   const { place, dates, numberOfGuests, name, phone, price } = req.body
 
@@ -226,13 +225,6 @@ app.post('/booking', async (req,res) => {
   } catch (error) {
     throw error
   }
-
-
-
-
-
-
-
 })
 
 function getUserDataFromToken(req) {
@@ -244,13 +236,12 @@ function getUserDataFromToken(req) {
   })
 }
 
-app.get('/bookings', async (req,res) => {
+router.get('/bookings', async (req,res) => {
   const userData = await getUserDataFromToken(req)
   res.json(await Booking.find({user: userData.id}).populate('place'))
 })
 
-app.put('/cancel', async (req, res) => {
-  const userData = await getUserDataFromToken(req)
+router.put('/cancel', async (req, res) => {
   const { id } = req.body
 
   try {
@@ -261,7 +252,7 @@ app.put('/cancel', async (req, res) => {
   }
 })
 
-app.get('/findplaces', async (req, res) => {
+router.get('/findplaces', async (req, res) => {
   const { name } = req.query
   if(name){
     const allPlaces = await Place.find()
@@ -271,8 +262,10 @@ app.get('/findplaces', async (req, res) => {
   else {
     res.json([])
   }
-
-
 })
 
-app.listen(4000);
+/* const PORT = process.env.PORT
+app.listen(PORT, () => {
+  console.log(`Server listening on port: ${PORT}`)
+}); */
+module.exports = router;
