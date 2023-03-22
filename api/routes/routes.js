@@ -5,8 +5,8 @@ const Place = require('../models/Place');
 const Booking = require('../models/Booking')
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
-const fs = require('fs');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 const { getUserDataFromToken } = require('../controller/userFromToken')
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'thisisunsecreto';
@@ -80,13 +80,14 @@ router.post('/upload-by-link', async (req, res) => {
     url: link,
     dest: __dirname + '/uploads/' + newName,
   });
+  console.log(__dirname)
   res.json(newName);
 });
 
 
 const photosMiddleware = multer({ dest: 'uploads/' });
 router.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
-  const uploadedFiles = [];
+const uploadedFiles = [];
   for (let i = 0; i < req.files.length; i++) {
     const { path, originalname } = req.files[i];
     const parts = originalname.split('.');
@@ -211,15 +212,6 @@ router.post('/booking', async (req,res) => {
   }
 })
 
-/* function getUserDataFromToken(req) {
-  return new Promise((resolve, reject)=> {
-    jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
-      if(err) throw err;
-      resolve(userData)
-    })
-  })
-} */
-
 router.get('/bookings', async (req,res) => {
   const userData = await getUserDataFromToken(req)
   res.json(await Booking.find({user: userData.id}).populate('place'))
@@ -248,8 +240,4 @@ router.get('/findplaces', async (req, res) => {
   }
 })
 
-/* const PORT = process.env.PORT
-app.listen(PORT, () => {
-  console.log(`Server listening on port: ${PORT}`)
-}); */
 module.exports = router;
