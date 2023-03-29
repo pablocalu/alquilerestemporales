@@ -1,7 +1,7 @@
 import React from 'react'
 import PlaceCard from '../components/PlaceCard'
 import { useEffect } from 'react';
-import { UserContext } from '../UserContext';
+import { UserContext } from '../context/UserContext';
 import { useContext } from 'react';
 
 export default function SearchPage() {

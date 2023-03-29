@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getPlaces } from '../methods/SearchMethod';
-import { UserContext } from '../UserContext';
+import { UserContext } from '../context/UserContext';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
