@@ -3,10 +3,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Place = require('../models/Place');
 const Booking = require('../models/Booking')
-const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
-const fs = require('fs');
 const { getUserDataFromToken } = require('../controller/userFromToken')
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'thisisunsecreto';
@@ -73,31 +71,6 @@ router.post('/logout', (req, res) => {
   res.cookie('token', '').json(true);
 });
 
-router.post('/upload-by-link', async (req, res) => {
-  const { link } = req.body;
-  const newName = 'photo' + Date.now() + '.jpg';
-  await imageDownloader.image({
-    url: link,
-    dest: __dirname + '/uploads/' + newName,
-  });
-  console.log(__dirname)
-  res.json(newName);
-});
-
-
-const photosMiddleware = multer({ dest: 'uploads/' });
-router.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
-const uploadedFiles = [];
-  for (let i = 0; i < req.files.length; i++) {
-    const { path, originalname } = req.files[i];
-    const parts = originalname.split('.');
-    const ext = parts[parts.length - 1];
-    const newPath = path + '.' + ext;
-    fs.renameSync(path, newPath);
-    uploadedFiles.push(newPath.replace('uploads/', ''));
-  }
-  res.json(uploadedFiles);
-});
 
 router.post('/places', (req, res) => {
   const { token } = req.cookies;
