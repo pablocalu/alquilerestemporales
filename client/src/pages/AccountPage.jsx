@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import AccountNav from '../AccountNav';
-import { UserContext } from '../UserContext';
+import AccountNav from '../components/AccountNav';
+import { UserContext } from '../context/UserContext';
 import PlacesPage from './PlacesPage';
 
 export default function AccountPage() {

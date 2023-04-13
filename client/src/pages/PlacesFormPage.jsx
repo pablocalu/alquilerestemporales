@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import Perks from '../Perks'
+import Perks from '../components/Perks'
 import PhotosUploader from '../components/PhotosUploader'
 import PhotosUploader2 from '../components/PhotosUploader2'
-import AccountNav from '../AccountNav'
+import AccountNav from '../components/AccountNav'
 import axios from 'axios'
 import { Navigate, useParams } from 'react-router-dom'
 

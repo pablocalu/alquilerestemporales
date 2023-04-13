@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import AccountNav from '../AccountNav';
+import AccountNav from '../components/AccountNav';
 import PlaceImg from '../components/PlaceImg';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { Link } from 'react-router-dom';
