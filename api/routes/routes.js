@@ -4,6 +4,8 @@ const User = require('../models/User');
 const Place = require('../models/Place');
 const Booking = require('../models/Booking')
 const multer = require('multer');
+const upload = multer({ dest: 'uploads/'})
+const cloudinary = require('cloudinary').v2
 const bcrypt = require('bcryptjs');
 const { getUserDataFromToken } = require('../controller/userFromToken')
 const bcryptSalt = bcrypt.genSaltSync(10);
@@ -11,6 +13,17 @@ const jwtSecret = 'thisisunsecreto';
 
 const { Router } = require('express');
 const router = Router();
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  const path = req.file.path
+  cloudinary.uploader.upload(path, (error, result) => {
+    if(error){
+      console.log(error)
+      return res.status(500).json({ message: "Upload image failed"})
+    }
+    res.status(200).json({ url: result.secure_url})
+  })
+})
 
 
 router.post('/register', async (req, res) => {
